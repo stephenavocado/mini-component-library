@@ -9,21 +9,24 @@ const STYLES = {
   small: {
     height: 8,
     padding: 0,   
+    radius: 4,
   },
   medium: {
     height: 12,
-    padding: 0,    
+    padding: 0,   
+    radius: 4,
   },
   large: {
     height: 16,    
     padding: 4,
+    radius: 8,
   },
 }
 
 const ProgressBar = ({ value, size }) => {
   const styles = STYLES[size];
 
-  /* TMakes sure we have a style object - to help detect the problem more easily */
+  /* To make sure we have a style object - to help detect the problem more easily */
   if(!styles) {
     throw new Error(`Unkown size passed to ProgressBar: ${size}`);
   }
@@ -34,7 +37,10 @@ const ProgressBar = ({ value, size }) => {
       aria-valuenow={value} 
       aria-valuemin="0" 
       aria-valuemax="100"
-      style={{'--padding': styles.padding + 'px'}}
+      style={{
+        '--padding': styles.padding + 'px',
+        '--radius': styles.radius + 'px',
+      }}
     >
       <VisuallyHidden>{value}</VisuallyHidden>
       <BarWrapper> 
@@ -51,7 +57,7 @@ const ProgressBar = ({ value, size }) => {
 const Wrapper = styled.div`
   background-color: ${COLORS.transparentGray15};
   box-shadow: inset 0px 2px 4px ${COLORS.transparentGray35};
-  border-radius: 4px;
+  border-radius: var(--radius);
   padding: var(--padding);
   /* Trim off corners when progress bar is near full */
 `
