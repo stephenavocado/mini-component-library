@@ -6,59 +6,84 @@ import { COLORS } from '../../constants';
 import Icon from '../Icon';
 import VisuallyHidden from '../VisuallyHidden';
 
+const STYLES = {
+  small: {
+    fontSize: 14,
+    iconSize: 16,
+    borderThickness: 1,
+    height: 24,
+  },
+  large: {
+    fontSize: 18,
+    iconSize: 24,
+    borderThickness: 2,
+    height: 36,
+  },
+};
+
 const IconInput = ({
   label,
   icon,
-  width,
+  width = 250,
   size,
-  placeholder,
+  ...delegated
+  /* delegate props down to where they are used */
 }) => {
+  const styles = STYLES[size];
+
+  // TODO: validate size
   return (
-    <Wrapper 
-      style = {{ '--width': width + 'px'}}
-    >
+    <Wrapper>
       <VisuallyHidden>{label}</VisuallyHidden>
-      <IconWrapper
-
-
+      <IconWrapper style={{ '--size': styles.iconSize + 'px' }}>
+        <Icon id={icon} size={styles.iconSize} />
+      </IconWrapper>
+      <TextInput 
+      {...delegated} 
+      style={{
+        '--width': width + 'px', 
+        '--height': styles.height + 'px', 
+        '--border-thickness': styles.borderThickness + 'px',
+        }} 
       />
-      <Input 
-        style = {{ '--width': width + 'px'}}
-        placeholder = "Search..."
-      />
-      <Underline />
     </Wrapper>
       );
     };
   
-  const Wrapper = styled.div`
-    width: var(--width);
-    border-radius: 2px;
-  `
+  const Wrapper = styled.label`
+    display: block;
+    position: relative;
+    color: ${COLORS.gray700};
+
+    &:hover {
+      color: ${COLORS.black};
+    }
+  `;
 
   const IconWrapper = styled.div`
-    width: 11px;
-    height: 16px;
-  `
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    height: var(--size);
+  `;
 
-  const Input = styled.input`
-    border: none; 
+  const TextInput = styled.input`
+    /* we want the height to scale with browser */ 
+    height: var(--height);
     width: var(--width);
-    height: 16px;
-    font-size: 16px;
-    padding-bottom: 4px;
+    border: none;
+    border-bottom: var(--border-thickness) solid ${COLORS.black};
+    padding-left: 24px;
+    color: inherit;
+    font-weight: 700;
+    font-size: ${14 / 16}rem;
+    outline-offset: 2px;
 
-    &:focus {
-      border: none;
+    &::placeholder {
+      color: ${COLORS.gray500};
+      font-weight: 400;
     }
-  `
-
-  const Underline = styled.div`
-    height: 0px;
-    border: .5px solid ${COLORS.black};
-    background-color: ${COLORS.black};
-    border-radius: 2px;
-    width: auto;
-  `
+  `;
     
 export default IconInput;
